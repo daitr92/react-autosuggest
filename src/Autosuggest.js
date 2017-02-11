@@ -80,6 +80,7 @@ export default class Autosuggest extends Component {
     },
     shouldRenderSuggestions: PropTypes.func,
     alwaysRenderSuggestions: PropTypes.bool,
+    clearAfterSelecting: PropTypes.bool,
     multiSection: PropTypes.bool,
     renderSectionTitle: (props, propName) => {
       const renderSectionTitle = props[propName];
@@ -104,6 +105,7 @@ export default class Autosuggest extends Component {
   static defaultProps = {
     shouldRenderSuggestions: defaultShouldRenderSuggestions,
     alwaysRenderSuggestions: false,
+    clearAfterSelecting: false,
     multiSection: false,
     focusInputOnSuggestionClick: true,
     focusFirstSuggestion: false,
@@ -339,12 +341,12 @@ export default class Autosuggest extends Component {
   };
 
   onSuggestionSelected = (event, data) => {
-    const { alwaysRenderSuggestions, onSuggestionSelected, onSuggestionsFetchRequested } = this.props;
+    const { alwaysRenderSuggestions, clearAfterSelecting, onSuggestionSelected, onSuggestionsFetchRequested } = this.props;
 
     onSuggestionSelected && onSuggestionSelected(event, data);
 
     if (alwaysRenderSuggestions) {
-      onSuggestionsFetchRequested({ value: data.suggestionValue });
+      onSuggestionsFetchRequested({ value: clearAfterSelecting ? '' : data.suggestionValue });
     } else {
       this.onSuggestionsClearRequested();
     }
